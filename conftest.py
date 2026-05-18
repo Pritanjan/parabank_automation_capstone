@@ -11,7 +11,7 @@ from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.firefox.service import Service as FirefoxService
 from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.firefox import GeckoDriverManager
-from banking_bdd.utils.report_utils import ReportUtils
+from utils.report_utils import ReportUtils
 
 BASE_URL = "http://parabank.parasoft.com/parabank/index.htm"
 REPORTS_DIR = os.path.join(os.path.dirname(__file__), "reports")
