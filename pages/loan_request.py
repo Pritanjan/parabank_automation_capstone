@@ -1,6 +1,5 @@
 from selenium.webdriver.common.by import By
 from pages.base_page import BasePage
-import time
 
 class LoanRequestPage:
     def __init__(self, driver):
