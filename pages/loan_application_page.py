@@ -13,21 +13,9 @@ class LoanApplicationPage:
     DOWN_PAYMENT = (By.ID, "downPayment")
     FROM_ACCOUNT = (By.ID, "fromAccountId")
     APPLY_NOW_BUTTON = (By.XPATH, "//input[@value='Apply Now']")
-    
-    APPROVAL_MESSAGE = (
-        By.XPATH,
-        "//h1[contains(text(),'Loan Request Processed')]"
-    )
-
-    RESULT_MESSAGE = (
-        By.ID,
-        "loanStatus"
-    )
-
-    ERROR_MESSAGE = (
-        By.ID,
-        "loanRequestDenied"
-    )
+    APPROVAL_MESSAGE = (By.XPATH, "//h1[contains(text(),'Loan Request Processed')]")
+    RESULT_MESSAGE = (By.ID, "loanStatus")
+    ERROR_MESSAGE = (By.ID, "loanRequestDenied")
     
     def enter_loan_amount(self, amount):
         self.driver.find_element(*self.LOAN_AMOUNT).clear()
