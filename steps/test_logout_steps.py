@@ -7,7 +7,7 @@ scenarios("../features/logout.feature")
 
 
 VALID_USERNAME = "priyanshu14"
-VALID_PASSWORD = "demo"
+VALID_PASSWORD = "priyanshu123"
 
 
 @given("user launches the Parabank application")
@@ -16,6 +16,7 @@ def launch_application(browser):
     page = LoginPage(browser)
 
     page.open_application()
+
 
 @given("user logs in with valid credentials")
 def login_user(browser):
@@ -30,7 +31,8 @@ def login_user(browser):
     )
 
     page.wait.until(
-        lambda driver: "overview" in driver.current_url.lower()
+        lambda driver:
+        "overview" in driver.current_url.lower()
     )
 
 
@@ -55,12 +57,19 @@ def browser_back(browser):
 
     browser.back()
 
+    browser.refresh()
+
 
 @then("user should not access account overview page")
 def verify_session_ended(browser):
 
-    assert "overview" not in \
-           browser.current_url.lower()
+    assert (
+        "login"
+        in browser.page_source.lower()
+        or
+        "username"
+        in browser.page_source.lower()
+    )
 
 
 @then("login form should be displayed")

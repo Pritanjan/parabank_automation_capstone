@@ -1,150 +1,63 @@
-"""
-conftest.py - Global fixtures and hooks for Pytest-BDD
-Banking Automation Project - Parabank
-"""
-
 import pytest
-import os
-from datetime import datetime
 
 from selenium import webdriver
 
-from selenium.webdriver.chrome.service import Service as ChromeService
-from selenium.webdriver.firefox.service import Service as FirefoxService
+from selenium.webdriver.chrome.service import (
+    Service
+)
 
-from webdriver_manager.chrome import ChromeDriverManager
-from webdriver_manager.firefox import GeckoDriverManager
-
-
-BASE_URL = "http://parabank.parasoft.com/parabank/index.htm"
-
-REPORTS_DIR = os.path.join(
-    os.path.dirname(__file__),
-    "reports"
+from webdriver_manager.chrome import (
+    ChromeDriverManager
 )
 
 
-def pytest_addoption(parser):
-
-    parser.addoption(
-        "--browser",
-        action="store",
-        default="chrome",
-        help="Browser to run tests: chrome | firefox"
-    )
+BASE_URL = (
+    "http://parabank.parasoft.com/parabank/index.htm"
+)
 
 
 @pytest.fixture(scope="function")
-def browser(request):
+def browser():
 
-    browser_name = request.config.getoption(
-        "--browser"
-    ).lower()
+    options = webdriver.ChromeOptions()
 
-    if browser_name == "firefox":
+    options.add_argument("--start-maximized")
+    options.add_argument("--disable-notifications")
+    options.add_argument("--disable-infobars")
+    options.add_argument("--disable-extensions")
+    options.add_argument(
+        "--disable-session-crashed-bubble"
+    )
 
-        service = FirefoxService(
-            GeckoDriverManager().install()
-        )
+    service = Service(
+        ChromeDriverManager().install()
+    )
 
-        driver = webdriver.Firefox(
-            service=service
-        )
-
-    else:
-
-        service = ChromeService(
-            ChromeDriverManager().install()
-        )
-
-        options = webdriver.ChromeOptions()
-
-        options.add_argument("--start-maximized")
-        options.add_argument("--disable-notifications")
-        options.add_argument("--disable-infobars")
-        options.add_argument("--disable-extensions")
-
-        driver = webdriver.Chrome(
-            service=service,
-            options=options
-        )
+    driver = webdriver.Chrome(
+        service=service,
+        options=options
+    )
 
     driver.implicitly_wait(10)
 
-    driver.get(BASE_URL)
+    driver.set_page_load_timeout(30)
+
+    try:
+
+        driver.get(BASE_URL)
+
+    except Exception:
+
+        driver.refresh()
 
     yield driver
 
-    driver.quit()
+    try:
 
+        driver.delete_all_cookies()
 
-@pytest.fixture(scope="session", autouse=True)
-def setup_reports():
+        driver.quit()
 
-    os.makedirs(
-        REPORTS_DIR,
-        exist_ok=True
-    )
+    except Exception:
 
-
-def pytest_bdd_before_scenario(
-        request,
-        feature,
-        scenario
-):
-
-    print(f"\n▶ SCENARIO: {scenario.name}")
-
-
-def pytest_bdd_after_scenario(
-        request,
-        feature,
-        scenario
-):
-
-    print(f"\n✓ DONE: {scenario.name}")
-
-
-def pytest_bdd_step_error(
-        request,
-        feature,
-        scenario,
-        step,
-        step_func,
-        step_func_args,
-        exception
-):
-
-    driver = request.getfixturevalue(
-        "browser"
-    )
-
-    timestamp = datetime.now().strftime(
-        "%Y%m%d_%H%M%S"
-    )
-
-    screenshot_name = (
-        f"{scenario.name.replace(' ', '_')}"
-        f"_{timestamp}.png"
-    )
-
-    screenshot_path = os.path.join(
-        REPORTS_DIR,
-        screenshot_name
-    )
-
-    driver.save_screenshot(
-        screenshot_path
-    )
-
-    print(
-        f"\n📸 Screenshot saved: "
-        f"{screenshot_path}"
-    )
-
-
-def pytest_html_report_title(report):
-
-    report.title = (
-        "Banking Automation Report - Parabank"
-    )
+        pass

@@ -31,7 +31,7 @@ Feature: Login Functionality for Parabank Application
         Then login result should be "<result>"
 
         Examples:
-            | username    | password | result  |
-            | priyanshu14 | demo     | success |
-            | john123     | wrong123 | failure |
-            | invalid     | demo     | failure |
+            | username    | password     | result  |
+            | priyanshu14 | priyanshu123 | success |
+            | john123     | wrong123     | failure |
+            | invalid     | demo         | failure |

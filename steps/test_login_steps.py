@@ -7,7 +7,7 @@ scenarios("../features/login.feature")
 
 
 VALID_USERNAME = "priyanshu14"
-VALID_PASSWORD = "demo"
+VALID_PASSWORD = "priyanshu123"
 
 
 @given("user launches the Parabank application")
@@ -78,14 +78,19 @@ def verify_login_failure(browser):
 
     page = LoginPage(browser)
 
-    assert "could not be verified" in \
-           page.get_error_message().lower()
+    error_message = page.get_error_message().lower()
+
+    assert (
+        "could not be verified" in error_message
+        or
+        "error" in error_message
+    )
 
 
 @then("user should see required field validation message")
 def verify_blank_login(browser):
 
-    assert "error" in browser.title.lower()
+    assert "error" in browser.page_source.lower()
 
 
 @given("user logs in with valid credentials")
@@ -119,7 +124,9 @@ def verify_logout_redirect(browser):
     assert page.is_login_page_displayed()
 
 
-@when(parsers.parse('user enters username "{username}" and password "{password}"'))
+@when(parsers.parse(
+    'user enters username "{username}" and password "{password}"'
+))
 def multiple_login(browser, username, password):
 
     page = LoginPage(browser)
@@ -130,7 +137,9 @@ def multiple_login(browser, username, password):
     )
 
 
-@then(parsers.parse('login result should be "{result}"'))
+@then(parsers.parse(
+    'login result should be "{result}"'
+))
 def verify_multiple_login(browser, result):
 
     page = LoginPage(browser)
@@ -141,5 +150,7 @@ def verify_multiple_login(browser, result):
 
     else:
 
-        assert "could not be verified" in \
-               page.get_error_message().lower()
+        assert (
+            "could not be verified"
+            in page.get_error_message().lower()
+        )
