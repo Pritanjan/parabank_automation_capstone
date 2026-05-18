@@ -6,7 +6,7 @@ class TransactionHistoryPage(BasePage):
     FIND_TRANSACTIONS_LINK = (By.LINK_TEXT, "Find Transactions")
     FIRST_ACCOUNT_LINK     = (By.XPATH, "//table[@id='accountTable']//a")
     ACCOUNT_DROPDOWN       = (By.ID, "accountId")
-    FIND_BY_AMOUNT         = (By.ID, "amount")
+    FIND_BY_AMOUNT         = (By.ID, "criteria.amount")
     FIND_BY_AMOUNT_BUTTON  = (By.ID, "findByAmount")
     TRANSACTION_TABLE      = (By.ID, "transactionTable")
     TRANSACTION_ROWS       = (By.XPATH, "//table[@id='transactionTable']//tbody/tr")
