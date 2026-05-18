@@ -20,18 +20,24 @@ class LoginPage:
         self.driver.get(self.url)
 
     def enter_username(self, username):
-        self.wait.until(
+        username_field = self.wait.until(
             EC.visibility_of_element_located(self.username_input)
-        ).clear()
-
-        self.driver.find_element(*self.username_input).send_keys(username)
+        )
+        username_field.clear()
+        username_field.send_keys(username)
 
     def enter_password(self, password):
-        self.driver.find_element(*self.password_input).clear()
-        self.driver.find_element(*self.password_input).send_keys(password)
+        password_field = self.wait.until(
+            EC.visibility_of_element_located(self.password_input)
+        )
+        password_field.clear()
+        password_field.send_keys(password)
 
     def click_login(self):
-        self.driver.find_element(*self.login_button).click()
+        login_btn = self.wait.until(
+            EC.element_to_be_clickable(self.login_button)
+        )
+        login_btn.click()
 
     def login(self, username, password):
         self.enter_username(username)
@@ -44,9 +50,10 @@ class LoginPage:
         ).is_displayed()
 
     def click_logout(self):
-        self.wait.until(
+        logout_btn = self.wait.until(
             EC.element_to_be_clickable(self.logout_link)
-        ).click()
+        )
+        logout_btn.click()
 
     def get_error_message(self):
         return self.wait.until(
