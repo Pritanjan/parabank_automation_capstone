@@ -1,4 +1,3 @@
-# features/fund_transfer.feature
 
 Feature: Fund Transfer Between Accounts
   As a bank customer
