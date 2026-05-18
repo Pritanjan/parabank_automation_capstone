@@ -37,7 +37,9 @@ def pytest_addoption(parser):
 @pytest.fixture(scope="function")
 def browser(request):
 
-    browser_name = request.config.getoption("--browser").lower()
+    browser_name = request.config.getoption(
+        "--browser"
+    ).lower()
 
     if browser_name == "firefox":
 
@@ -45,7 +47,9 @@ def browser(request):
             GeckoDriverManager().install()
         )
 
-        driver = webdriver.Firefox(service=service)
+        driver = webdriver.Firefox(
+            service=service
+        )
 
     else:
 
@@ -77,15 +81,26 @@ def browser(request):
 @pytest.fixture(scope="session", autouse=True)
 def setup_reports():
 
-    os.makedirs(REPORTS_DIR, exist_ok=True)
+    os.makedirs(
+        REPORTS_DIR,
+        exist_ok=True
+    )
 
 
-def pytest_bdd_before_scenario(request, feature, scenario):
+def pytest_bdd_before_scenario(
+        request,
+        feature,
+        scenario
+):
 
     print(f"\n▶ SCENARIO: {scenario.name}")
 
 
-def pytest_bdd_after_scenario(request, feature, scenario):
+def pytest_bdd_after_scenario(
+        request,
+        feature,
+        scenario
+):
 
     print(f"\n✓ DONE: {scenario.name}")
 
@@ -100,12 +115,17 @@ def pytest_bdd_step_error(
         exception
 ):
 
-    driver = request.getfixturevalue("browser")
+    driver = request.getfixturevalue(
+        "browser"
+    )
 
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    timestamp = datetime.now().strftime(
+        "%Y%m%d_%H%M%S"
+    )
 
     screenshot_name = (
-        f"{scenario.name.replace(' ', '_')}_{timestamp}.png"
+        f"{scenario.name.replace(' ', '_')}"
+        f"_{timestamp}.png"
     )
 
     screenshot_path = os.path.join(
@@ -113,11 +133,18 @@ def pytest_bdd_step_error(
         screenshot_name
     )
 
-    driver.save_screenshot(screenshot_path)
+    driver.save_screenshot(
+        screenshot_path
+    )
 
-    print(f"\n📸 Screenshot saved: {screenshot_path}")
+    print(
+        f"\n📸 Screenshot saved: "
+        f"{screenshot_path}"
+    )
 
 
 def pytest_html_report_title(report):
 
-    report.title = "Banking Automation Report - Parabank"
+    report.title = (
+        "Banking Automation Report - Parabank"
+    )
