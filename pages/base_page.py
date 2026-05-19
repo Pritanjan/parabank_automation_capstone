@@ -6,29 +6,24 @@ class BasePage:
 
     def __init__(self, driver):
         self.driver = driver
-        self.wait = WebDriverWait(driver, 10)
 
     def open_url(self, url):
         self.driver.get(url)
 
-    def click_element(self, locator):
-        self.wait.until(
-            EC.element_to_be_clickable(locator)
-        ).click()
-
-    def enter_text(self, locator, text):
-        element = self.wait.until(
+    def find_element(self, locator, timeout=10):
+        return WebDriverWait(self.driver, timeout).until(
             EC.visibility_of_element_located(locator)
         )
+
+    def enter_text(self, locator, text):
+        element = self.find_element(locator)
         element.clear()
         element.send_keys(text)
 
-    def get_text(self, locator):
-        return self.wait.until(
-            EC.visibility_of_element_located(locator)
-        ).text
+    def click_element(self, locator):
+        element = self.find_element(locator)
+        element.click()
 
-    def is_displayed(self, locator):
-        return self.wait.until(
-            EC.visibility_of_element_located(locator)
-        ).is_displayed()
+    def get_text(self, locator):
+        element = self.find_element(locator)
+        return element.text

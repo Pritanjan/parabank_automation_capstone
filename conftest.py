@@ -8,7 +8,7 @@ BASE_URL = "http://parabank.parasoft.com/parabank/index.htm"
 
 
 @pytest.fixture(scope="function")
-def browser():
+def driver():
 
     service = Service(
         ChromeDriverManager().install()
@@ -27,4 +27,9 @@ def browser():
     yield driver
 
     driver.quit()
+
+
+@pytest.fixture(scope="function")
+def browser(driver):
+    return driver
     
