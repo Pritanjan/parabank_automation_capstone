@@ -15,9 +15,6 @@ BASE_URL = (
     "http://parabank.parasoft.com/parabank/index.htm"
 )
 
-    driver = webdriver.Chrome(
-        service=service
-    )
 
 @pytest.fixture(scope="function")
 def browser():
