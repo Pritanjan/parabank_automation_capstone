@@ -1,11 +1,11 @@
 import pytest
 from pytest_bdd import given, when, then, parsers, scenarios
 from pages.login_page import LoginPage
-from pages.fund_transfer_page import FundTransferPage
+from pages.transfer_funds_page import TransferFundsPage
 from pages.transaction_page import TransactionPage
 
 # ── Link to feature file ──────────────────────────────────────────────────────
-scenarios("../features/fund_transfer.feature")
+scenarios("../features/transfer_funds.feature")
 
 
 # ── Given Steps ───────────────────────────────────────────────────────────────
@@ -25,7 +25,7 @@ def logged_in_transfer(browser, username, password):
 
 @given("I navigate to the Transfer Funds page")
 def navigate_to_transfer(browser):
-    page = FundTransferPage(browser)
+    page = TransferFundsPage(browser)
     page.navigate_to_transfer()
 
 
@@ -33,20 +33,20 @@ def navigate_to_transfer(browser):
 
 @when(parsers.parse('I enter transfer amount "{amount}"'))
 def enter_transfer_amount(browser, amount):
-    page = FundTransferPage(browser)
+    page = TransferFundsPage(browser)
     page.enter_amount(amount)
 
 
 @when("I select source and destination accounts")
 def select_accounts(browser):
-    page = FundTransferPage(browser)
+    page = TransferFUNDSPage(browser)
     page.select_from_account(0)
     page.select_to_account(1)
 
 
 @when("I click the Transfer button")
 def click_transfer(browser):
-    page = FundTransferPage(browser)
+    page = TransferFundsPage(browser)
     page.click_transfer()
 
 
@@ -60,14 +60,14 @@ def go_to_accounts_overview(browser):
 
 @then("the transfer should be successful")
 def verify_transfer_success(browser):
-    page = FundTransferPage(browser)
+    page = TransferFundsPage(browser)
     assert page.is_transfer_successful(), \
         f"Transfer failed. Result: '{page.get_transfer_result()}'"
 
 
 @then(parsers.parse('I should see "{message}" message'))
 def verify_transfer_message(browser, message):
-    page = FundTransferPage(browser)
+    page = TransferFundsPage(browser)
     result = page.get_transfer_result()
     assert message in result, \
         f"Expected '{message}' in result, got '{result}'"

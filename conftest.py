@@ -15,7 +15,6 @@ BASE_URL = (
     "http://parabank.parasoft.com/parabank/index.htm"
 )
 
-
 @pytest.fixture(scope="function")
 def browser():
 
