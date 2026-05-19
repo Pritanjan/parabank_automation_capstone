@@ -1,80 +1,194 @@
 """
 utils/report_utils.py
-Custom HTML Report Generator for Banking Automation Suite
+Simple HTML Report Generator
 """
 
 import os
 import json
+
 from datetime import datetime
 
 
 class ReportUtils:
-    REPORTS_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "reports")
+
+    REPORTS_DIR = os.path.join(
+        os.path.dirname(
+            os.path.dirname(__file__)
+        ),
+        "reports"
+    )
+
+    LOG_FILE = os.path.join(
+        REPORTS_DIR,
+        "test_log.json"
+    )
+
+    REPORT_FILE = os.path.join(
+        REPORTS_DIR,
+        "summary.html"
+    )
 
     @staticmethod
     def ensure_reports_dir():
-        os.makedirs(ReportUtils.REPORTS_DIR, exist_ok=True)
+
+        os.makedirs(
+            ReportUtils.REPORTS_DIR,
+            exist_ok=True
+        )
 
     @staticmethod
-    def log_test_result(test_name: str, status: str, message: str = ""):
-        """Append a test result to a JSON log."""
-        ReportUtils.ensure_reports_dir()
-        log_file = os.path.join(ReportUtils.REPORTS_DIR, "test_log.json")
+    def log_test_result(
+            test_name,
+            status,
+            message=""
+    ):
 
-        entry = {
-            "test": test_name,
-            "status": status,
-            "message": message,
-            "timestamp": datetime.now().isoformat()
-        }
+        ReportUtils.ensure_reports_dir()
 
         logs = []
-        if os.path.exists(log_file):
-            with open(log_file, "r") as f:
-                try:
-                    logs = json.load(f)
-                except json.JSONDecodeError:
-                    logs = []
 
-        logs.append(entry)
-        with open(log_file, "w") as f:
-            json.dump(logs, f, indent=2)
+        if os.path.exists(
+                ReportUtils.LOG_FILE
+        ):
+
+            try:
+
+                with open(
+                        ReportUtils.LOG_FILE,
+                        "r"
+                ) as file:
+
+                    logs = json.load(file)
+
+            except json.JSONDecodeError:
+
+                logs = []
+
+        logs.append({
+            "test": test_name,
+            "status": status.upper(),
+            "message": message,
+            "time": datetime.now().strftime(
+                "%Y-%m-%d %H:%M:%S"
+            )
+        })
+
+        with open(
+                ReportUtils.LOG_FILE,
+                "w"
+        ) as file:
+
+            json.dump(
+                logs,
+                file,
+                indent=4
+            )
 
     @staticmethod
     def generate_summary_report():
-        """Generate a summary HTML from test_log.json."""
-        log_file = os.path.join(ReportUtils.REPORTS_DIR, "test_log.json")
-        if not os.path.exists(log_file):
+
+        if not os.path.exists(
+                ReportUtils.LOG_FILE
+        ):
+
             return
 
-        with open(log_file, "r") as f:
-            logs = json.load(f)
+        with open(
+                ReportUtils.LOG_FILE,
+                "r"
+        ) as file:
 
-        passed = sum(1 for l in logs if l["status"] == "PASS")
-        failed = sum(1 for l in logs if l["status"] == "FAIL")
-        total = len(logs)
+            logs = json.load(file)
+
+        passed = sum(
+            1 for log in logs
+            if log["status"] == "PASS"
+        )
+
+        failed = sum(
+            1 for log in logs
+            if log["status"] == "FAIL"
+        )
 
         html = f"""
-        <html><head><title>Banking Test Summary</title></head>
-        <body style="font-family: Arial;">
-        <h1>Banking Automation Summary</h1>
-        <p>Total: {total} | Passed: {passed} | Failed: {failed}</p>
-        <table border="1" cellpadding="5">
-        <tr><th>Test</th><th>Status</th><th>Message</th><th>Time</th></tr>
+        <html>
+
+        <head>
+            <title>
+                Parabank Report
+            </title>
+        </head>
+
+        <body style="font-family:Arial;">
+
+            <h1>
+                Parabank Automation Report
+            </h1>
+
+            <h3>
+                Total: {len(logs)}
+            </h3>
+
+            <h3 style="color:green;">
+                Passed: {passed}
+            </h3>
+
+            <h3 style="color:red;">
+                Failed: {failed}
+            </h3>
+
+            <table border="1" cellpadding="10">
+
+                <tr>
+                    <th>Test</th>
+                    <th>Status</th>
+                    <th>Message</th>
+                    <th>Time</th>
+                </tr>
         """
+
         for log in logs:
-            color = "green" if log["status"] == "PASS" else "red"
+
+            color = (
+                "green"
+                if log["status"] == "PASS"
+                else "red"
+            )
+
             html += f"""
-            <tr>
-                <td>{log['test']}</td>
-                <td style="color:{color}"><b>{log['status']}</b></td>
-                <td>{log['message']}</td>
-                <td>{log['timestamp']}</td>
-            </tr>"""
+                <tr>
 
-        html += "</table></body></html>"
+                    <td>{log['test']}</td>
 
-        summary_path = os.path.join(ReportUtils.REPORTS_DIR, "summary.html")
-        with open(summary_path, "w") as f:
-            f.write(html)
-        print(f"\n📊 Summary report: {summary_path}")
+                    <td style="color:{color};">
+                        {log['status']}
+                    </td>
+
+                    <td>{log['message']}</td>
+
+                    <td>{log['time']}</td>
+
+                </tr>
+            """
+
+        html += """
+
+            </table>
+
+        </body>
+
+        </html>
+        """
+
+        with open(
+                ReportUtils.REPORT_FILE,
+                "w",
+                encoding="utf-8"
+        ) as file:
+
+            file.write(html)
+
+        print(
+            f"\n📊 Report Generated:"
+            f"\n{ReportUtils.REPORT_FILE}"
+        )

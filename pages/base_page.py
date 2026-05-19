@@ -1,103 +1,181 @@
 """
-pages/base_page.py
-Base Page Object - All pages inherit from this.
-Contains common Selenium helper methods.
+Base Page for Parabank Framework
 """
 
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.by import By
-from selenium.common.exceptions import TimeoutException, NoSuchElementException
 import time
+
+from selenium.webdriver.support.ui import (
+    WebDriverWait,
+    Select
+)
+
+from selenium.webdriver.support import (
+    expected_conditions as EC
+)
+
+from selenium.common.exceptions import (
+    TimeoutException,
+    NoSuchElementException
+)
 
 
 class BasePage:
+
     BASE_URL = "http://parabank.parasoft.com/parabank"
 
     def __init__(self, driver):
+
         self.driver = driver
-        self.wait = WebDriverWait(driver, 15)
+        self.wait = WebDriverWait(driver, 20)
 
-    # ── Navigation ──────────────────────────────────────────────────────────
+    # =========================
+    # OPEN URL METHODS
+    # =========================
 
-    def open(self, path=""):
+    def open(self, path="index.htm"):
+
         self.driver.get(f"{self.BASE_URL}/{path}")
 
+    # Compatibility Method
+    def open_url(self, url):
+
+        self.driver.get(url)
+
     def get_current_url(self):
+
         return self.driver.current_url
 
     def get_title(self):
+
         return self.driver.title
 
-    # ── Wait Helpers ─────────────────────────────────────────────────────────
+    # =========================
+    # WAIT METHODS
+    # =========================
 
-    def wait_for_element(self, by, locator, timeout=15):
+    def wait_for_element(self, locator, timeout=20):
+
         return WebDriverWait(self.driver, timeout).until(
-            EC.presence_of_element_located((by, locator))
+            EC.presence_of_element_located(locator)
         )
 
-    def wait_for_clickable(self, by, locator, timeout=15):
+    def wait_for_visible(self, locator, timeout=20):
+
         return WebDriverWait(self.driver, timeout).until(
-            EC.element_to_be_clickable((by, locator))
+            EC.visibility_of_element_located(locator)
         )
 
-    def wait_for_visible(self, by, locator, timeout=15):
+    def wait_for_clickable(self, locator, timeout=20):
+
         return WebDriverWait(self.driver, timeout).until(
-            EC.visibility_of_element_located((by, locator))
+            EC.element_to_be_clickable(locator)
         )
 
-    def wait_for_text_in_element(self, by, locator, text, timeout=15):
-        return WebDriverWait(self.driver, timeout).until(
-            EC.text_to_be_present_in_element((by, locator), text)
+    # =========================
+    # ACTION METHODS
+    # =========================
+
+    def click(self, locator):
+
+        element = self.wait_for_clickable(locator)
+
+        self.driver.execute_script(
+            "arguments[0].click();",
+            element
         )
 
-    # ── Element Actions ──────────────────────────────────────────────────────
+    # Compatibility Method
+    def click_element(self, locator):
 
-    def click(self, by, locator):
-        element = self.wait_for_clickable(by, locator)
-        element.click()
+        self.click(locator)
 
-    def type_text(self, by, locator, text):
-        element = self.wait_for_element(by, locator)
+    def type_text(self, locator, text):
+
+        element = self.wait_for_visible(locator)
+
         element.clear()
         element.send_keys(text)
 
-    def get_text(self, by, locator):
-        element = self.wait_for_visible(by, locator)
-        return element.text
+    # Compatibility Method
+    def enter_text(self, locator, text):
 
-    def is_element_present(self, by, locator, timeout=5):
+        self.type_text(locator, text)
+
+    def get_text(self, locator):
+
+        return self.wait_for_visible(locator).text
+
+    # Compatibility Method
+    def is_displayed(self, locator):
+
         try:
-            WebDriverWait(self.driver, timeout).until(
-                EC.presence_of_element_located((by, locator))
-            )
-            return True
-        except TimeoutException:
+
+            return self.wait_for_visible(locator).is_displayed()
+
+        except Exception:
+
             return False
 
-    def get_element_text_safe(self, by, locator, timeout=5):
-        """Returns text or empty string if element not found."""
+    # =========================
+    # VALIDATION METHODS
+    # =========================
+
+    def is_element_present(self, locator, timeout=5):
+
         try:
-            element = WebDriverWait(self.driver, timeout).until(
-                EC.visibility_of_element_located((by, locator))
+
+            WebDriverWait(self.driver, timeout).until(
+                EC.presence_of_element_located(locator)
             )
-            return element.text
-        except (TimeoutException, NoSuchElementException):
+
+            return True
+
+        except TimeoutException:
+
+            return False
+
+    def get_element_text_safe(self, locator, timeout=5):
+
+        try:
+
+            return WebDriverWait(
+                self.driver,
+                timeout
+            ).until(
+                EC.visibility_of_element_located(locator)
+            ).text
+
+        except (
+            TimeoutException,
+            NoSuchElementException
+        ):
+
             return ""
 
-    def select_dropdown_by_index(self, by, locator, index):
-        from selenium.webdriver.support.ui import Select
-        element = self.wait_for_element(by, locator)
-        Select(element).select_by_index(index)
+    # =========================
+    # DROPDOWN METHODS
+    # =========================
+
+    def select_dropdown_by_index(
+            self,
+            locator,
+            index
+    ):
+
+        Select(
+            self.wait_for_element(locator)
+        ).select_by_index(index)
+
+    # =========================
+    # UTIL METHODS
+    # =========================
 
     def take_screenshot(self, filename):
-        self.driver.save_screenshot(f"reports/{filename}.png")
-        print(f"📸 Screenshot: reports/{filename}.png")
 
-    def scroll_to_element(self, by, locator):
-        element = self.wait_for_element(by, locator)
-        self.driver.execute_script("arguments[0].scrollIntoView(true);", element)
-        return element
+        self.driver.save_screenshot(
+            f"reports/{filename}.png"
+        )
 
-    def wait(self, seconds):
+    def hard_wait(self, seconds):
+
         time.sleep(seconds)

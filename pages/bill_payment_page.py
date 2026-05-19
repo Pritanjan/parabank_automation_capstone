@@ -1,5 +1,6 @@
 from selenium.webdriver.common.by import By
 from pages.base_page import BasePage
+import time
 
 class BillPaymentPage(BasePage):
     BILL_PAY_LINK       = (By.LINK_TEXT, "Bill Pay")
@@ -18,32 +19,33 @@ class BillPaymentPage(BasePage):
     VALIDATION_ERROR    = (By.CLASS_NAME, "error")
 
     def click_bill_pay(self):
-        self.click(*self.BILL_PAY_LINK)
+        time.sleep(1)
+        self.click(self.BILL_PAY_LINK)
 
     def enter_payee_details(self):
-        self.type_text(*self.PAYEE_NAME,    "Electricity Board")
-        self.type_text(*self.ADDRESS,        "MG Road")
-        self.type_text(*self.CITY,           "Bangalore")
-        self.type_text(*self.STATE,          "Karnataka")
-        self.type_text(*self.ZIP_CODE,       "560001")
-        self.type_text(*self.PHONE,          "9876543210")
-        self.type_text(*self.ACCOUNT_NUMBER, "12345")
-        self.type_text(*self.VERIFY_ACCOUNT, "12345")
+        self.type_text(self.PAYEE_NAME,     "Electricity Board")
+        self.type_text(self.ADDRESS,         "MG Road")
+        self.type_text(self.CITY,            "Bangalore")
+        self.type_text(self.STATE,           "Karnataka")
+        self.type_text(self.ZIP_CODE,        "560001")
+        self.type_text(self.PHONE,           "9876543210")
+        self.type_text(self.ACCOUNT_NUMBER,  "12345")
+        self.type_text(self.VERIFY_ACCOUNT,  "12345")
 
     def enter_payment_amount(self, amount):
-        self.type_text(*self.AMOUNT, amount)
+        self.type_text(self.AMOUNT, amount)
 
     def select_from_account(self):
-        self.select_dropdown_by_index(*self.FROM_ACCOUNT, 1)
+        self.select_dropdown_by_index(self.FROM_ACCOUNT, 1)
 
     def click_send_payment(self):
-        self.click(*self.SEND_PAYMENT_BUTTON)
+        self.click(self.SEND_PAYMENT_BUTTON)
 
     def is_payment_successful(self):
-        return self.is_element_present(*self.SUCCESS_MESSAGE)
+        return self.is_element_present(self.SUCCESS_MESSAGE)
 
     def get_success_message(self):
-        return self.get_text(*self.SUCCESS_MESSAGE)
+        return self.get_text(self.SUCCESS_MESSAGE)
 
     def get_validation_error(self):
-        return self.get_element_text_safe(*self.VALIDATION_ERROR)
+        return self.get_element_text_safe(self.VALIDATION_ERROR)
