@@ -4,7 +4,9 @@ from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 
 
-BASE_URL = "http://parabank.parasoft.com/parabank/index.htm"
+BASE_URL = (
+    "http://parabank.parasoft.com/parabank/index.htm"
+)
 
 
 @pytest.fixture(scope="function")
@@ -26,5 +28,8 @@ def browser():
 
     yield driver
 
-    driver.quit()
-    
+        driver.quit()
+
+    except Exception:
+
+        pass
