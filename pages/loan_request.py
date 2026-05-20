@@ -12,19 +12,19 @@ class LoanRequestPage(BasePage):
     from_account_dropdown = (By.ID, "fromAccountId")
     apply_now_button = (By.XPATH, "//input[@value='Apply Now']")
 
-    # Methods to interact with the page
+    # Methods
     def enter_loan_amount(self, amount):
-        self.enter_text(self.loan_amount_input, amount)
+        self.type_text(self.loan_amount_input, amount)
 
     def enter_down_payment(self, down_payment):
-        self.enter_text(self.down_payment_input, down_payment)
+        self.type_text(self.down_payment_input, down_payment)
 
     def select_from_account(self, account_id):
         dropdown = self.driver.find_element(*self.from_account_dropdown)
-        for option in dropdown.find_elements(By.TAG_NAME, 'option'):
-            if option.get_attribute('value') == str(account_id):
+        for option in dropdown.find_elements(By.TAG_NAME, "option"):
+            if option.get_attribute("value") == str(account_id):
                 option.click()
                 break
 
     def click_apply_now(self):
-        self.click_element(self.apply_now_button)
+        self.click(self.apply_now_button)

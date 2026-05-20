@@ -32,6 +32,6 @@ Feature: Login Functionality for Parabank Application
 
         Examples:
             | username    | password     | result  |
-            | priyanshu14 | priyanshu123 | success |
+            | john        | demo         | success |
             | john123     | wrong123     | failure |
             | invalid     | demo         | failure |
