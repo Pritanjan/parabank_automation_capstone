@@ -18,12 +18,12 @@ class OpenNewAccountPage:
 
         self.wait = WebDriverWait(
             driver,
-            30
+            40
         )
 
         self.open_account_link = (
-            By.LINK_TEXT,
-            "Open New Account"
+            By.XPATH,
+            "//a[contains(text(),'Open New Account')]"
         )
 
         self.account_type_dropdown = (
@@ -49,6 +49,12 @@ class OpenNewAccountPage:
     def click_open_new_account(self):
 
         self.wait.until(
+            EC.visibility_of_element_located(
+                self.open_account_link
+            )
+        )
+
+        self.wait.until(
             EC.element_to_be_clickable(
                 self.open_account_link
             )
@@ -59,13 +65,14 @@ class OpenNewAccountPage:
         account_type
     ):
 
-        dropdown = Select(
-
-            self.wait.until(
-                EC.presence_of_element_located(
-                    self.account_type_dropdown
-                )
+        dropdown_element = self.wait.until(
+            EC.visibility_of_element_located(
+                self.account_type_dropdown
             )
+        )
+
+        dropdown = Select(
+            dropdown_element
         )
 
         dropdown.select_by_visible_text(
@@ -74,13 +81,19 @@ class OpenNewAccountPage:
 
     def select_from_account(self):
 
-        dropdown = Select(
-
-            self.wait.until(
-                EC.presence_of_element_located(
-                    self.from_account_dropdown
-                )
+        dropdown_element = self.wait.until(
+            EC.visibility_of_element_located(
+                self.from_account_dropdown
             )
+        )
+
+        dropdown = Select(
+            dropdown_element
+        )
+
+        self.wait.until(
+            lambda driver:
+            len(dropdown.options) > 0
         )
 
         dropdown.select_by_index(0)
