@@ -1,9 +1,10 @@
 from selenium.webdriver.common.by import By
 from pages.base_page import BasePage
 
-class LoanRequestPage:
+
+class LoanRequestPage(BasePage):
     def __init__(self, driver):
-        self.driver = driver
+        super().__init__(driver)
 
     # Locators
     loan_amount_input = (By.ID, "amount")
@@ -13,12 +14,10 @@ class LoanRequestPage:
 
     # Methods to interact with the page
     def enter_loan_amount(self, amount):
-        self.driver.find_element(*self.loan_amount_input).clear()
-        self.driver.find_element(*self.loan_amount_input).send_keys(amount)
+        self.enter_text(self.loan_amount_input, amount)
 
     def enter_down_payment(self, down_payment):
-        self.driver.find_element(*self.down_payment_input).clear()
-        self.driver.find_element(*self.down_payment_input).send_keys(down_payment)
+        self.enter_text(self.down_payment_input, down_payment)
 
     def select_from_account(self, account_id):
         dropdown = self.driver.find_element(*self.from_account_dropdown)
@@ -28,4 +27,4 @@ class LoanRequestPage:
                 break
 
     def click_apply_now(self):
-        self.driver.find_element(*self.apply_now_button).click()
+        self.click_element(self.apply_now_button)

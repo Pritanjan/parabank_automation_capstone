@@ -19,8 +19,11 @@ def login(browser, username, password):
 @given('I navigate to the Request Loan page')
 def navigate_to_request_loan_page(browser):
     browser.loan = LoanApprovalPage(browser)
-    browser.find_element(By.LINK_TEXT, "Request Loan").click()
-    WebDriverWait(browser, 10).until(
+    request_loan_link = WebDriverWait(browser, 10).until(
+        EC.element_to_be_clickable((By.LINK_TEXT, "Request Loan"))
+    )
+    request_loan_link.click()
+    WebDriverWait(browser, 30).until(
         EC.presence_of_element_located((By.ID, "amount"))
     )
 
@@ -59,7 +62,7 @@ def error_message(browser, message):
 @then(parsers.parse("I should receive an approval message '{message}'"))
 def verify_approval_message(browser, message):
     loan_page = LoanApprovalPage(browser)
-    # result_message = loan_page.get_result_message()
+    result_message = loan_page.get_result_message()
     # assert message in result_message, f"Expected message '{message}' not found in '{result_message}'"
 
 @then(parsers.parse("I should receive a denial message '{message}'"))

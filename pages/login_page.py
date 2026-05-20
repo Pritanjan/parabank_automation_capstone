@@ -1,22 +1,117 @@
 from selenium.webdriver.common.by import By
-from pages.base_page import BasePage
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 
-class LoginPage(BasePage):
+class LoginPage:
 
-    URL = "https://parabank.parasoft.com/parabank/index.htm"
+    def __init__(self, driver):
 
-    USERNAME_INPUT = (By.NAME, "username")
-    PASSWORD_INPUT = (By.NAME, "password")
-    LOGIN_BUTTON = (By.XPATH, "//input[@value='Log In']")
-    ERROR_MESSAGE = (By.CLASS_NAME, "error")
+        self.driver = driver
+
+        self.wait = WebDriverWait(driver, 10)
+
+        self.url = (
+            "http://parabank.parasoft.com/"
+            "parabank/index.htm"
+        )
+
+        self.username_input = (
+            By.NAME,
+            "username"
+        )
+
+        self.password_input = (
+            By.NAME,
+            "password"
+        )
+
+        self.login_button = (
+            By.XPATH,
+            "//input[@value='Log In']"
+        )
+
+        self.logout_link = (
+            By.LINK_TEXT,
+            "Log Out"
+        )
+
+        self.error_message = (
+            By.XPATH,
+            "//p[@class='error']"
+        )
 
     def open_application(self):
-        self.open_url(self.URL)
+
+        self.driver.get(self.url)
+
+    def enter_username(self, username):
+
+        self.wait.until(
+            EC.visibility_of_element_located(
+                self.username_input
+            )
+        ).clear()
+
+        self.driver.find_element(
+            *self.username_input
+        ).send_keys(username)
+
+    def enter_password(self, password):
+
+        self.driver.find_element(
+            *self.password_input
+        ).clear()
+
+        self.driver.find_element(
+            *self.password_input
+        ).send_keys(password)
+
+    def click_login(self):
+
+        self.driver.find_element(
+            *self.login_button
+        ).click()
 
     def login(self, username, password):
 
-        self.enter_text(self.USERNAME_INPUT, username)
-        self.enter_text(self.PASSWORD_INPUT, password)
+        self.enter_username(username)
 
-        self.click_element(self.LOGIN_BUTTON)
+        self.enter_password(password)
+
+        self.click_login()
+
+    def is_logout_displayed(self):
+
+        return self.wait.until(
+            EC.presence_of_element_located(
+                self.logout_link
+            )
+        ).is_displayed()
+
+    def click_logout(self):
+
+        self.wait.until(
+            EC.element_to_be_clickable(
+                self.logout_link
+            )
+        ).click()
+
+    def get_error_message(self):
+
+        return self.wait.until(
+            EC.visibility_of_element_located(
+                self.error_message
+            )
+        ).text
+
+    def get_current_url(self):
+
+        return self.driver.current_url
+
+
+if __name__ == "__main__":
+
+    print(
+        "Login Page executed successfully"
+    )

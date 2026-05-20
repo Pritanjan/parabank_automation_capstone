@@ -27,13 +27,18 @@ class LoanApprovalPage(BasePage):
     def enter_down_payment(self, payment):
         self.enter_text(self.DOWN_PAYMENT, payment)
 
+    # def select_from_account(self):
+
+    #     dropdown = Select(
+    #         self.driver.find_element(self.FROM_ACCOUNT)
+    #     )
+
+    #     dropdown.select_by_index(0)
+
     def select_from_account(self):
+        # This replaces the entire Select(self.find_element(...)) block
+        self.select_dropdown_by_index(self.FROM_ACCOUNT, 0)
 
-        dropdown = Select(
-            self.find_element(self.FROM_ACCOUNT)
-        )
-
-        dropdown.select_by_index(0)
 
     def click_apply_now(self):
         self.click_element(self.APPLY_NOW_BUTTON)
