@@ -1,6 +1,6 @@
-Feature: Account Balance Transfer
+Feature: Account Balance and Fund Transfer
 
-  Scenario: Transfer funds between accounts and verify success
+  Scenario: User transfers funds between accounts and verifies balance update
     Given user launches the ParaBank application
     And user logs in with username "john" and password "demo"
     Then user should be navigated to Accounts Overview page
