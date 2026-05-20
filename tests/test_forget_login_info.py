@@ -2,7 +2,7 @@ from pytest_bdd import scenarios, given, when, then, parsers
 
 from pages.forget_login_info import ForgotLoginInfoPage
 
-scenarios("../features/forget_logon_info.feature")
+scenarios("../features/forget_login_info.feature")
 
 
 @given("user launches the Parabank application")
