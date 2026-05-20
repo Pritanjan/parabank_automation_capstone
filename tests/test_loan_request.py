@@ -27,8 +27,11 @@ def login(browser, username, password):
 @given("I navigate to the Request Loan page")
 def navigate_to_loan_page(browser):
     browser.loan = LoanRequestPage(browser)
-    browser.find_element(By.LINK_TEXT, "Request Loan").click()
-    WebDriverWait(browser, 10).until(
+    request_loan_link = WebDriverWait(browser, 10).until(
+        EC.element_to_be_clickable((By.LINK_TEXT, "Request Loan"))
+    )
+    request_loan_link.click()
+    WebDriverWait(browser, 30).until(
         EC.presence_of_element_located((By.ID, "amount"))
     )
 
