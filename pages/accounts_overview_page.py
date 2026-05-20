@@ -17,6 +17,18 @@ class AccountsOverviewPage(BasePage):
             By.XPATH,
             "//h1[contains(text(),'Accounts Overview')]"
         )
+        self.account_table = (
+            By.ID,
+            "accountTable"
+        )
+        self.source_balance = (
+            By.XPATH,
+            "//table[@id='accountTable']/tbody/tr[1]/td[2]"
+        )
+        self.destination_balance = (
+            By.XPATH,
+            "//table[@id='accountTable']/tbody/tr[2]/td[2]"
+        )
 
     def open_accounts_overview_page(self):
 
@@ -29,3 +41,23 @@ class AccountsOverviewPage(BasePage):
 
     def verify_accounts_page(self):
         return self.is_displayed(self.accounts_overview_text)
+
+    def is_accounts_overview_displayed(self):
+        return self.verify_accounts_page()
+
+    def _parse_balance(self, balance_text):
+        cleaned = balance_text.replace("$", "").replace(",", "")
+        try:
+            return float(cleaned)
+        except ValueError:
+            return 0.0
+
+    def get_source_balance(self):
+        return self._parse_balance(
+            self.get_text(self.source_balance)
+        )
+
+    def get_destination_balance(self):
+        return self._parse_balance(
+            self.get_text(self.destination_balance)
+        )

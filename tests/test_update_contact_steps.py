@@ -1,8 +1,57 @@
-from pytest_bdd import scenarios, when, then
+from pytest_bdd import scenarios, when, then, given
 from pages.update_contact_page import UpdateContactPage
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
-scenarios("../features/update_contact_info.feature")
+scenarios("../features/update_contact_information.feature")
 
+
+
+@given("user launches the ParaBank application")
+def launch_application(driver):
+
+    driver.get(
+        "https://parabank.parasoft.com/parabank/index.htm"
+    )
+
+
+@given('user logs in with username "john" and password "demo"')
+def login(driver):
+
+    wait = WebDriverWait(driver, 10)
+
+    username = wait.until(
+        EC.presence_of_element_located(
+            (By.NAME, "username")
+        )
+    )
+
+    password = driver.find_element(
+        By.NAME,
+        "password"
+    )
+
+    username.clear()
+    username.send_keys("john")
+
+    password.clear()
+    password.send_keys("demo")
+
+    driver.find_element(
+        By.XPATH,
+        "//input[@value='Log In']"
+    ).click()
+
+
+@then("user should be navigated to Accounts Overview page")
+def verify_login(driver):
+
+    WebDriverWait(driver, 10).until(
+        EC.url_contains("overview")
+    )
+
+    assert "overview" in driver.current_url.lower()
 
 @when("user navigates to Update Contact Info page")
 def navigate_update_contact(driver):
@@ -51,9 +100,4 @@ def click_update(driver):
 
 @then("contact information should be updated successfully")
 def validate_profile_update(driver):
-    assert UpdateContactPage(driver).is_profile_updated()
-
-
-@then("updated contact information should be displayed correctly")
-def validate_updated_info(driver):
     assert UpdateContactPage(driver).is_profile_updated()

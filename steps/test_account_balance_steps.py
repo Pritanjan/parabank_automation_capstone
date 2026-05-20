@@ -26,7 +26,7 @@ def verify_accounts_page(driver):
     ).is_accounts_overview_displayed()
 
 
-@given("user captures the initial balance of source account")
+@then("user captures the initial balance of source account")
 def capture_initial_source_balance(driver):
     global initial_source_balance
     initial_source_balance = (
@@ -34,7 +34,7 @@ def capture_initial_source_balance(driver):
     )
 
 
-@given("user captures the initial balance of destination account")
+@then("user captures the initial balance of destination account")
 def capture_initial_destination_balance(driver):
     global initial_destination_balance
     initial_destination_balance = (

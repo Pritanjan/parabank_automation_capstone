@@ -17,3 +17,8 @@ def driver():
     yield driver
 
     driver.quit()
+
+
+@pytest.fixture
+def browser(driver):
+    return driver

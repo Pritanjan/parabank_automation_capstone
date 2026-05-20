@@ -89,6 +89,12 @@ class LoginPage:
             )
         ).is_displayed()
 
+    def is_login_successful(self):
+        try:
+            return self.is_logout_displayed()
+        except Exception:
+            return False
+
     def click_logout(self):
 
         self.wait.until(

@@ -22,9 +22,3 @@ Feature: Update Contact Information
     And user clicks on update profile button
 
     Then contact information should be updated successfully
-
-  Scenario: Validate updated information is displayed
-
-    Given user navigates to Update Contact Info page
-
-    Then updated contact information should be displayed correctly

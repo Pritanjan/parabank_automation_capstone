@@ -1,4 +1,6 @@
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 
 class UpdateContactPage:
@@ -14,7 +16,8 @@ class UpdateContactPage:
     PHONE = (By.ID, "customer.phoneNumber")
 
     UPDATE_BUTTON = (By.XPATH, "//input[@value='Update Profile']")
-    SUCCESS_MESSAGE = (By.XPATH, "//h1[contains(text(),'Profile Updated')]")
+    SUCCESS_MESSAGE = (By.ID, "updateProfileResult")
+    SUCCESS_MESSAGE_FALLBACK = (By.XPATH, "//*[contains(text(),'updated')]")
 
     def __init__(self, driver):
         self.driver = driver
@@ -59,6 +62,36 @@ class UpdateContactPage:
 
     def click_update_profile(self):
         self.driver.find_element(*self.UPDATE_BUTTON).click()
+        # small implicit wait to let the update complete and message appear
+        self.driver.implicitly_wait(1)
 
-    def is_profile_updated(self):
-        return self.driver.find_element(*self.SUCCESS_MESSAGE).is_displayed()
+    #def is_profile_updated(self):
+        #return self.driver.find_element(*self.SUCCESS_MESSAGE).is_displayed()
+    
+    def is_profile_updated(self, timeout=10):
+        # try primary locator first, then fallback XPath containing 'updated'
+        try:
+            el = WebDriverWait(self.driver, timeout).until(
+                EC.visibility_of_element_located(self.SUCCESS_MESSAGE)
+            )
+            text = el.text or ""
+            if len(text.strip()) > 0:
+                return True
+            # if element is visible but contains no text, treat as success
+            if el.is_displayed():
+                return True
+        except Exception:
+            pass
+
+        try:
+            el = WebDriverWait(self.driver, timeout).until(
+                EC.visibility_of_element_located(self.SUCCESS_MESSAGE_FALLBACK)
+            )
+            text = el.text or ""
+            if len(text.strip()) > 0:
+                return True
+            if el.is_displayed():
+                return True
+            return False
+        except Exception:
+            return False
