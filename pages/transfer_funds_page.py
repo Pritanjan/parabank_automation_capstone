@@ -29,25 +29,27 @@ class TransferFundsPage(BasePage):
 
     # ── Actions ───────────────────────────────────────────────────────────────
 
+    # SAHI — tuple as-is pass karo
     def navigate_to_transfer(self):
-        self.click(*self.TRANSFER_LINK)
+        self.click(self.TRANSFER_LINK)
+
+    def navigate_to_transfer_funds(self):
+        self.navigate_to_transfer()
 
     def enter_amount(self, amount: str):
-        self.type_text(*self.AMOUNT_INPUT, amount)
+        self.type_text(self.AMOUNT_INPUT, amount)
 
     def select_from_account(self, index: int = 0):
-        self.select_dropdown_by_index(*self.FROM_ACCOUNT, index)
+        self.select_dropdown_by_index(self.FROM_ACCOUNT, index)
 
     def select_to_account(self, index: int = 1):
-        """Select destination account - default index 1 to pick different account."""
         try:
-            self.select_dropdown_by_index(*self.TO_ACCOUNT, index)
+            self.select_dropdown_by_index(self.TO_ACCOUNT, index)
         except Exception:
-            # If only one account, select index 0
-            self.select_dropdown_by_index(*self.TO_ACCOUNT, 0)
+            self.select_dropdown_by_index(self.TO_ACCOUNT, 0)
 
     def click_transfer(self):
-        self.click(*self.TRANSFER_BUTTON)
+        self.click(self.TRANSFER_BUTTON)
 
     def transfer_funds(self, amount: str, from_index: int = 0, to_index: int = 1):
         """Full fund transfer flow."""
@@ -72,4 +74,4 @@ class TransferFundsPage(BasePage):
         return "Transfer Complete" in result or "Complete" in result
 
     def get_error_message(self) -> str:
-        return self.get_element_text_safe(*self.ERROR_MSG)
+        return self.get_element_text_safe(self.ERROR_MSG)
