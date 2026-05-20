@@ -36,7 +36,7 @@ class BillPaymentPage(BasePage):
         self.type_text(self.AMOUNT, amount)
 
     def select_from_account(self):
-        self.select_dropdown_by_index(self.FROM_ACCOUNT, 1)
+        self.select_dropdown_by_index(self.FROM_ACCOUNT, 0)  # 1 → 0
 
     def click_send_payment(self):
         self.click(self.SEND_PAYMENT_BUTTON)

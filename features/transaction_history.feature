@@ -2,7 +2,7 @@ Feature: Transaction History Validation for Parabank Application
 
   Background:
     Given user launches the ParaBank application
-    And user logs in with username "john" and password "demo"
+    And user logs in with username "priyanshu14" and password "priyanshu123"
 
   Scenario: View transaction history for selected account
     Given user navigates to Accounts Overview page
@@ -39,6 +39,6 @@ Feature: Transaction History Validation for Parabank Application
 
   Scenario: Find transaction by transaction ID
     Given user navigates to Find Transactions page
-    When user enters transaction ID "12478" to search
+    When user enters transaction ID "20470" to search
     And user clicks Find Transactions by ID button
     Then transaction details page should be displayed

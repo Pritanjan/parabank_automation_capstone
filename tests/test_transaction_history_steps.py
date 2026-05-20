@@ -16,13 +16,12 @@ def launch_app(browser):
     pass
 
 
-@given('user logs in with username "john" and password "demo"')
+@given('user logs in with username "priyanshu14" and password "priyanshu123"')
 def login_user(browser):
-    browser.find_element(By.NAME, "username").send_keys("john")
-    browser.find_element(By.NAME, "password").send_keys("demo")
+    browser.find_element(By.NAME, "username").send_keys("priyanshu14")
+    browser.find_element(By.NAME, "password").send_keys("priyanshu123")
     browser.find_element(By.XPATH, "//input[@value='Log In']").click()
     time.sleep(2)
-
 
 # ── Accounts Overview Scenarios ───────────────────────────────────────────────
 
@@ -86,8 +85,8 @@ def login_and_go_to_find_transactions(browser):
     browser.get("http://parabank.parasoft.com/parabank/index.htm")
     time.sleep(1)
     if "Log Out" not in browser.page_source:
-        browser.find_element(By.NAME, "username").send_keys("john")
-        browser.find_element(By.NAME, "password").send_keys("demo")
+        browser.find_element(By.NAME, "username").send_keys("priyanshu14")  # changed
+        browser.find_element(By.NAME, "password").send_keys("priyanshu123")  # changed
         browser.find_element(By.XPATH, "//input[@value='Log In']").click()
         time.sleep(2)
     browser.find_element(By.LINK_TEXT, "Find Transactions").click()

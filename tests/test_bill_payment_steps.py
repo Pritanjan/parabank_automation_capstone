@@ -11,10 +11,10 @@ def launch_application(browser):
     pass  # browser fixture already opens BASE_URL
 
 
-@given('user logs in with username "john" and password "demo"')
+@given('user logs in with username "priyanshu14" and password "priyanshu123"')
 def login_user(browser):
-    browser.find_element("name", "username").send_keys("john")
-    browser.find_element("name", "password").send_keys("demo")
+    browser.find_element("name", "username").send_keys("priyanshu14")
+    browser.find_element("name", "password").send_keys("priyanshu123")
     browser.find_element("xpath", "//input[@value='Log In']").click()
 
 

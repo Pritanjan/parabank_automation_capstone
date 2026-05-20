@@ -2,7 +2,7 @@ Feature: Bill Payment Functionality for Parabank Application
 
   Background:
     Given user launches the ParaBank application
-    And user logs in with username "john" and password "demo"
+    And user logs in with username "priyanshu14" and password "priyanshu123"
 
   Scenario: Pay bill successfully with valid details
     Given user navigates to Bill Pay page
