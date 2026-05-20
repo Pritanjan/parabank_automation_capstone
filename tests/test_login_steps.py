@@ -6,8 +6,8 @@ from pages.logout_page import LogoutPage
 scenarios("../features/login.feature")
 
 
-VALID_USERNAME = "priyanshu14"
-VALID_PASSWORD = "priyanshu123"
+VALID_USERNAME = "john"
+VALID_PASSWORD = "demo"
 
 
 @given("user launches the Parabank application")
