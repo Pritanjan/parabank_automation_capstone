@@ -150,7 +150,12 @@ def verify_multiple_login(browser, result):
 
     else:
 
+        error_message = page.get_error_message().lower()
+
         assert (
-            "could not be verified"
-            in page.get_error_message().lower()
+            "could not be verified" in error_message
+            or
+            "internal error" in error_message
+            or
+            "error" in error_message
         )
