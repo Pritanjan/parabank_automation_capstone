@@ -61,3 +61,8 @@ def browser():
     except Exception:
 
         pass
+
+
+@pytest.fixture(scope="function")
+def driver(browser):
+    return browser
