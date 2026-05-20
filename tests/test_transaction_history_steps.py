@@ -187,6 +187,19 @@ def verify_results(browser):
 
 @then("transaction details page should be displayed")
 def verify_txn_detail_page(browser):
+    
+    WebDriverWait(browser, 15).until(
+        EC.presence_of_element_located((By.ID, "transactionTable"))
+    )
+    
+    first_link = WebDriverWait(browser, 10).until(
+        EC.presence_of_element_located(
+            (By.XPATH, "//table[@id='transactionTable']//tbody/tr[1]//a")
+        )
+    )
+    first_link.click()
+    time.sleep(2)
+    
     WebDriverWait(browser, 15).until(
         EC.presence_of_element_located(
             (By.XPATH, "//h1[contains(text(),'Transaction Details')]")
