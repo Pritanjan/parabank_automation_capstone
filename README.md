@@ -13,7 +13,6 @@ The automation framework is designed to simulate real-world banking scenarios an
 Manual testing of banking systems involving loans, EMI calculations, and financial transactions is time-consuming and prone to errors. Since banking applications deal with sensitive financial data, a robust automation framework is essential to validate critical functionalities such as:
 
 - Loan application approval/rejection
-- EMI calculation
 - Fund transfer
 - Balance updates
 - Transaction history accuracy
@@ -60,7 +59,7 @@ Features used in this project:
 |----------|-----------|
 | Programming Language | Python |
 | Automation Tool | Selenium WebDriver |
-| Testing Framework | pytest |
+| Testing Framework | pytest-bdd |
 | Design Pattern | Page Object Model (POM) |
 | Reporting | HTML Reports |
 | CI/CD | GitHub Actions (Optional) |
@@ -85,12 +84,8 @@ BankingAutomationProject/
 │   └── transfer_page.py
 │
 ├── utilities/
-│   ├── driver_factory.py
-│   ├── config_reader.py
-│   └── test_data.py
-│
-├── reports/
-│
+│   ├── utils_report.py
+|
 ├── screenshots/
 │
 ├── requirements.txt
