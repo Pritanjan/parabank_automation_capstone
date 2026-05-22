@@ -13,7 +13,6 @@ The automation framework is designed to simulate real-world banking scenarios an
 Manual testing of banking systems involving loans, EMI calculations, and financial transactions is time-consuming and prone to errors. Since banking applications deal with sensitive financial data, a robust automation framework is essential to validate critical functionalities such as:
 
 - Loan application approval/rejection
-- EMI calculation
 - Fund transfer
 - Balance updates
 - Transaction history accuracy
