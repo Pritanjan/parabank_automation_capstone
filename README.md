@@ -85,12 +85,8 @@ BankingAutomationProject/
 │   └── transfer_page.py
 │
 ├── utilities/
-│   ├── driver_factory.py
-│   ├── config_reader.py
-│   └── test_data.py
-│
-├── reports/
-│
+│   ├── utils_report.py
+|
 ├── screenshots/
 │
 ├── requirements.txt
