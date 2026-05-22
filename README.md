@@ -60,7 +60,7 @@ Features used in this project:
 |----------|-----------|
 | Programming Language | Python |
 | Automation Tool | Selenium WebDriver |
-| Testing Framework | pytest |
+| Testing Framework | pytest-bdd |
 | Design Pattern | Page Object Model (POM) |
 | Reporting | HTML Reports |
 | CI/CD | GitHub Actions (Optional) |
